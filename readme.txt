@@ -1,3 +1,5 @@
-moje pierwsze web api
-moje pierwsze web api II
-moje pierwsze web api III
+moje pierwsze web api z tutoriala net nija
+
+node.js
+sql server db
+react
