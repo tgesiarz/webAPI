@@ -2,6 +2,8 @@ const connection = require('tedious').Connection;
 const request = require('tedious').Request;
 const types = require('tedious').TYPES;
 
+var config = require('./../config/conf');
+
 const dbConfig = {
         userName: 'test',
         password: 'test',
@@ -15,11 +17,12 @@ exports.executeSQL = (sql, callback) => {
   var conn = new connection(dbConfig);
   // on connection to the database
   conn.on('connect', function(err) {
-    if(err) {
+    if(err && config.isLoggingEnabled) {
       console.log(err);
     }
     else {
-      console.log('connected to db');
+      if(config.isLoggingEnabled) 
+        console.log('connected to db');
       req = new request(sql, (err, rowCount, rows) => { callback(err, rowCount, rsJSON); conn.close(); } );
       // construct dynamic resultset
       var rsJSON = [];
@@ -36,6 +39,7 @@ exports.executeSQL = (sql, callback) => {
   });
   // on connection close
   conn.on('end', () => {
-    console.log('connection closed');
+    if(config.isLoggingEnabled)
+      console.log('connection closed');
   });
 }

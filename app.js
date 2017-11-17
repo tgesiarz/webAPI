@@ -3,6 +3,9 @@ const bodyParser = require('body-parser');
 
 const app = express();
 
+//server static files
+app.use(express.static('public'));
+
 // body parser middleware
 app.use(bodyParser.json());
 

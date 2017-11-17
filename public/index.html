@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My First Noje page</title>
+    <link href="styles.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+</head>
+<body>
+    <div id="homepage">
+        <h1>Search items:</h1>
+        <div id="maincontent"></div>
+    </div>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script src="https://unpkg.com/react@15/dist/react.js"></script>
+    <script src="https://unpkg.com/react-dom@15/dist/react-dom.min.js"></script>
+
+    <!-- react component -->
+    <script type="text/babel">
+    
+        var Items = React.createClass({
+
+            getInitialState: function(){
+                return({
+                    items: []
+                })
+            },
+            render: function() {
+                var items = this.state.items;
+                items = items.map(function(item, index){
+                    return(
+                        <li key={index}>
+                            <span>{item.ID}</span>
+                            <span>{item.Item}</span>
+                        </li>
+                    );
+                });
+                return(
+                    <div id="item-container">
+                        <form id="search" onSubmit={this.handleSubmit}>
+                            <label>Enter item name:</label>
+                            <input type="text" ref="item" placeholder="item" required />
+                            <input type="submit" value="search" />
+                        </form>
+                        <ul>{items}</ul>
+                    </div>
+                );
+            },
+            handleSubmit: function(e) {
+                e.preventDefault();
+                var item = this.refs.item.value;
+
+                fetch('/api/cars?name='+item).then(function(data){
+                    return data.json();
+                }).then(json => {
+                    this.setState({
+                        items:json
+                    });
+                });
+            }
+        });
+
+        ReactDOM.render(<Items/>, document.getElementById('maincontent'));
+
+    </script>
+
+</body>
+</html>
